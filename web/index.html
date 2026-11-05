@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Net Tool Box · 网络工具箱</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>🛠 Net Tool Box</h1>
+  <p class="subtitle">网络诊断工具箱 · 本地 IP / 公网 IP / CGNAT / 多层 NAT / 端口查询</p>
+</header>
+
+<main class="grid">
+
+  <!-- 本地 IP -->
+  <section class="card">
+    <h2>📍 本地 IP 信息</h2>
+    <div class="card-body" id="local-body"><div class="loading">正在获取…</div></div>
+  </section>
+
+  <!-- 公网 IP -->
+  <section class="card">
+    <h2>🌐 公网 IP</h2>
+    <div class="card-body" id="public-body"><div class="loading">正在获取…</div></div>
+  </section>
+
+  <!-- NAT / CGNAT -->
+  <section class="card span-2">
+    <h2>🔀 NAT / CGNAT 检测</h2>
+    <div class="card-body">
+      <p class="hint">一键判断你是否拥有公网 IP、是否处于运营商级 NAT（CGNAT）或多层 NAT。约需数秒。</p>
+      <button class="btn" id="btn-nat" onclick="runNAT()">开始检测</button>
+      <div id="nat-body"></div>
+    </div>
+  </section>
+
+  <!-- 本地网络链路 -->
+  <section class="card span-2">
+    <h2>🔗 本地网络链路</h2>
+    <div class="card-body">
+      <p class="hint">一键追踪从本机到公网的完整链路，直观看到经过的每一层（路由器 / 光猫 / 运营商 NAT）。约需 10~30 秒。</p>
+      <button class="btn" id="btn-trace" onclick="runTrace()">开始追踪</button>
+      <div id="trace-body"></div>
+    </div>
+  </section>
+
+  <!-- 端口查询 -->
+  <section class="card span-2">
+    <h2>🔌 端口查询</h2>
+    <div class="card-body">
+      <div class="row">
+        <input type="number" id="local-port" placeholder="本地端口，如 8080" min="1" max="65535">
+        <button class="btn" onclick="checkLocalPort()">检查本地端口占用</button>
+      </div>
+      <div id="local-port-result"></div>
+
+      <div class="row">
+        <input type="text" id="remote-host" placeholder="主机/IP，如 example.com">
+        <input type="number" id="remote-port" placeholder="端口，如 443" min="1" max="65535">
+        <button class="btn" onclick="checkRemotePort()">检测远端端口</button>
+      </div>
+      <div id="remote-port-result"></div>
+
+      <button class="btn ghost" onclick="listPorts()">列出本机监听端口</button>
+      <div id="list-ports-result"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>Net Tool Box · 纯 Go 实现 · 数据仅在本地处理，不经过任何第三方服务器</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
