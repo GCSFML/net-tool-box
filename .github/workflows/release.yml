@@ -71,8 +71,30 @@ jobs:
         with:
           path: artifacts
 
+      # 三个平台都会产出同名的 nettoolbox / nettoolbox-cli，
+      # 直接上传会互相覆盖（Linux 和 macOS 尤其危险），所以按平台重命名。
+      - name: Flatten and rename assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p out
+          for dir in artifacts/*/; do
+            name=$(basename "$dir")        # 例如 nettoolbox-linux-amd64
+            plat=${name#nettoolbox-}       # 例如 linux-amd64
+            for f in "$dir"*; do
+              base=$(basename "$f")
+              if [[ "$base" == *.exe ]]; then
+                cp "$f" "out/${base%.exe}-${plat}.exe"
+              else
+                cp "$f" "out/${base}-${plat}"
+              fi
+            done
+          done
+          echo "发布产物："
+          ls -l out
+
       - name: Publish
         uses: softprops/action-gh-release@v2
         with:
-          files: artifacts/**
+          files: out/*
           generate_release_notes: true
